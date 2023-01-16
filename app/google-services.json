@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "368076913050",
+    "project_id": "tutorialproject-d9b12",
+    "storage_bucket": "tutorialproject-d9b12.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368076913050:android:f88f7648c7a6ca6f562223",
+        "android_client_info": {
+          "package_name": "com.example.notsteam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368076913050-s5gbejkt4u5annvqqgbfr6bs5c4gds64.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC29oopz90c02D6NXGlrUGS_jb83Rk5OAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368076913050-s5gbejkt4u5annvqqgbfr6bs5c4gds64.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "368076913050-ibopjcpj32do76d7s4ojkk3ntq3k39ej.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "mY.LoginPrototype"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368076913050:android:50ac7d68ea3328be562223",
+        "android_client_info": {
+          "package_name": "com.example.testapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368076913050-s5gbejkt4u5annvqqgbfr6bs5c4gds64.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC29oopz90c02D6NXGlrUGS_jb83Rk5OAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368076913050-s5gbejkt4u5annvqqgbfr6bs5c4gds64.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "368076913050-ibopjcpj32do76d7s4ojkk3ntq3k39ej.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "mY.LoginPrototype"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
