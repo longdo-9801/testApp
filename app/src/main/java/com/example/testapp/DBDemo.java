@@ -99,8 +99,6 @@ public class DBDemo extends AppCompatActivity {
                 // this method is called when the data addition process is failed.
                 // displaying a toast message when data addition is failed.
                 Toast.makeText(DBDemo.this, "Fail to add course \n" + e, Toast.LENGTH_SHORT).show();
-                TextView errorButton = findViewById(R.id.textError);
-                errorButton.setText(e.toString());
             }
         });
     }
