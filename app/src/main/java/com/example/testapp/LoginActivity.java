@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.testapp.Object.GlobalSingleton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -21,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "EmailPassword";
     private FirebaseAuth mAuth;
-    //private Boolean isLoginSuccess = false;
+    private GlobalSingleton globalSingleton = GlobalSingleton.getInstance();
     private String email;
     private String password;
 
@@ -30,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-//        Intent intent = getIntent();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                             //Log.d(TAG, "signInWithEmail:success");
                             Toast.makeText(LoginActivity.this,"LOGIN SUCCESS", Toast.LENGTH_LONG).show();
                             FirebaseUser user = mAuth.getCurrentUser();
+                            //globalSingleton.setLoginState();
                             updateUI(user);
                             finish();
                         } else {

@@ -9,8 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.testapp.Object.GlobalSingleton;
+
 public class MainActivity extends AppCompatActivity {
-    Boolean isLogin = false;
+    Boolean isLogin;
+    GlobalSingleton globalSingleton =  GlobalSingleton.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         Button myButton = (Button) findViewById(R.id.buttonGotoLogin);
         Button DBDemoButton = (Button) findViewById(R.id.buttonToDatabase);
 
+        isLogin = globalSingleton.getLogin();
         if (isLogin) {
             myButton.setText("SignOut");
         } else {
