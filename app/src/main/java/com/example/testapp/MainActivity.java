@@ -50,17 +50,11 @@ public class MainActivity extends AppCompatActivity {
         DBDemoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressText.setText(globalSingleton.getCurrentUser().getEmail());
                 //globalSingleton.getUserDEBUG();
 //                Intent intentDB = new Intent(MainActivity.this, DBDemo.class);
 //                startActivity(intentDB)
-                globalSingleton.setCurrentUser("b@test.com",
-                        new Callback() {
-                            @Override
-                            public void firestoreCallBack(User result) {
-                                String debugValue = globalSingleton.getCurrentUser().getEmail();
-                                Toast.makeText(MainActivity.this, debugValue, Toast.LENGTH_SHORT).show();
-                            }
-                });
+
 
             }
         });

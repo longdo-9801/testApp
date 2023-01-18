@@ -88,7 +88,7 @@ public class GlobalSingleton {
         });
     }
 
-    public void setCurrentUser(String email, final Callback callback) {
+    public void setCurrentUser(String email) {
 
         dbUser.whereEqualTo("email", email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -98,7 +98,11 @@ public class GlobalSingleton {
                     DocumentSnapshot document = task.getResult().getDocuments().get(0);
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document);
-                        currentUser = new User((String) document.get("id"),(String) document.get("email"), (List<String>) document.get("order"));
+                        currentUser =
+                                new User(document.getId(),
+                                        (String) document.get("email"),
+                                        (List<String>) document.get("gameList"),
+                                        Double.parseDouble(document.get("balance").toString()) );
                     } else {
                         Log.d(TAG, "No such document");
                     }

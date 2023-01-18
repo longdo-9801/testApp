@@ -14,15 +14,14 @@ public class User {
     public User(String id, String email) {
         this.id = id;
         this.email = email;
-
         this.accountBalance = 0;
     }
 
-    public User(String id, String email,List<String> gameList) {
+    public User(String id, String email,List<String> gameList, double balance) {
         this.id = id;
         this.email = email;
         this.gameList = gameList;
-        this.accountBalance = 0;
+        this.accountBalance = balance;
     }
 
 

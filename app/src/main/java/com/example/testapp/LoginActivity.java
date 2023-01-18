@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.testapp.Object.GlobalSingleton;
+import com.example.testapp.Object.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -80,8 +81,9 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             //Log.d(TAG, "signInWithEmail:success");
                             Toast.makeText(LoginActivity.this,"LOGIN SUCCESS", Toast.LENGTH_LONG).show();
+
                             FirebaseUser user = mAuth.getCurrentUser();
-                            //globalSingleton.setLoginState();
+                            globalSingleton.setCurrentUser(email);
                             updateUI(user);
                             finish();
                         } else {
