@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.example.testapp.Object.GlobalSingleton;
 
 public class MainActivity extends AppCompatActivity {
-    Boolean isLogin;
+    Boolean isLogin = false;
     GlobalSingleton globalSingleton =  GlobalSingleton.getInstance();
 
     @Override
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         Button myButton = (Button) findViewById(R.id.buttonGotoLogin);
         Button DBDemoButton = (Button) findViewById(R.id.buttonToDatabase);
 
-        isLogin = globalSingleton.getLogin();
+        //isLogin = globalSingleton.getLogin();
         if (isLogin) {
             myButton.setText("SignOut");
         } else {
@@ -47,8 +47,11 @@ public class MainActivity extends AppCompatActivity {
         DBDemoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentDB = new Intent(MainActivity.this, DBDemo.class);
-                startActivity(intentDB);
+//                Intent intentDB = new Intent(MainActivity.this, DBDemo.class);
+//                startActivity(intentDB)
+                globalSingleton.setCurrentUser("b@test.com");
+                String debugValue = globalSingleton.getCurrentUser().getEmail();
+                Toast.makeText(MainActivity.this, debugValue, Toast.LENGTH_SHORT).show();
             }
         });
 
