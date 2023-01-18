@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.testapp.Object.GlobalSingleton;
+import com.example.testapp.Object.User;
 
 public class MainActivity extends AppCompatActivity {
     Boolean isLogin = false;
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button myButton = (Button) findViewById(R.id.buttonGotoLogin);
         Button DBDemoButton = (Button) findViewById(R.id.buttonToDatabase);
+        TextView progressText = (TextView) findViewById(R.id.progressText);
 
         //isLogin = globalSingleton.getLogin();
         if (isLogin) {
@@ -47,11 +50,18 @@ public class MainActivity extends AppCompatActivity {
         DBDemoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //globalSingleton.getUserDEBUG();
 //                Intent intentDB = new Intent(MainActivity.this, DBDemo.class);
 //                startActivity(intentDB)
-                globalSingleton.setCurrentUser("b@test.com");
-                String debugValue = globalSingleton.getCurrentUser().getEmail();
-                Toast.makeText(MainActivity.this, debugValue, Toast.LENGTH_SHORT).show();
+                globalSingleton.setCurrentUser("b@test.com",
+                        new Callback() {
+                            @Override
+                            public void firestoreCallBack(User result) {
+                                String debugValue = globalSingleton.getCurrentUser().getEmail();
+                                Toast.makeText(MainActivity.this, debugValue, Toast.LENGTH_SHORT).show();
+                            }
+                });
+
             }
         });
 

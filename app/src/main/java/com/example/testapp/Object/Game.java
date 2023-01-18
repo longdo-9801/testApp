@@ -19,9 +19,7 @@ public class Game {
         this.icon = icon;
         this.discount = 1.0;
         this.setSalePrice();
-
     }
-
 
     public Game(String id, String name, Set<String> genre, Float basePrice, Float discount, String icon) {
         this.id = id;
@@ -32,6 +30,7 @@ public class Game {
         this.setSalePrice();
         //this.icon = icon;
     }
+
 
     public String getId() {
         return id;

@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.testapp.Callback;
 import com.example.testapp.DBDemo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -16,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.List;
 import java.util.Set;
 
 public class GlobalSingleton {
@@ -27,7 +29,7 @@ public class GlobalSingleton {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-    CollectionReference dbUser = db.collection("user");
+    CollectionReference dbUser = db.collection("users");
     private static final String TAG = "DocSnippets";
 
     private static  GlobalSingleton instance;
@@ -86,23 +88,51 @@ public class GlobalSingleton {
         });
     }
 
-    public void setCurrentUser (String email) {
+    public void setCurrentUser(String email, final Callback callback) {
 
-        dbUser..collection("users").whereEqualTo("email", email)
+        dbUser.whereEqualTo("email", email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()) {
-                        //userID = documentSnapshot.getId();
-                        currentUser = new User(
-                                documentSnapshot.getId(),
-                                documentSnapshot.get("email").toString(),
-                                (Set<String>) documentSnapshot.get("order")
-                        );
+                    DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document);
+                        currentUser = new User((String) document.get("id"),(String) document.get("email"), (List<String>) document.get("order"));
+                    } else {
+                        Log.d(TAG, "No such document");
                     }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
                 }
 
+            }
+        });
+    }
+
+    public void addUserDEBUG() {
+        db.collection("DEBUGKore").document("DEBUGDoc")
+                .set(
+                        new User("555","Test@com")
+                );
+    }
+
+    public void getUserDEBUG() {
+        db.collection("DEBUGKore").document("DEBUGDoc")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        currentUser = new User((String) document.get("id"),(String) document.get("email"));
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
             }
         });
     }

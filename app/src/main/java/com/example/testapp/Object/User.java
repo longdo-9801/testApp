@@ -3,20 +3,29 @@ package com.example.testapp.Object;
 import com.example.testapp.Object.Game;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
 public class User {
     private String id;
     private String email;
-    private Set<String> gameList;
+    private List<String> gameList;
     private double accountBalance;
 
-    public User(String id, String email, Set<String> gameList) {
+    public User(String id, String email) {
         this.id = id;
         this.email = email;
-        this.gameList = Collections.emptySet();
+
         this.accountBalance = 0;
     }
+
+    public User(String id, String email,List<String> gameList) {
+        this.id = id;
+        this.email = email;
+        this.gameList = gameList;
+        this.accountBalance = 0;
+    }
+
+
 
     public String getId() {
         return id;
@@ -34,11 +43,11 @@ public class User {
         this.email = email;
     }
 
-    public Set<String> getGameList() {
+    public List<String> getGameList() {
         return gameList;
     }
 
-    public void setGameList(Set<String> gameList) {
+    public void setGameList(List<String> gameList) {
         this.gameList = gameList;
     }
 
