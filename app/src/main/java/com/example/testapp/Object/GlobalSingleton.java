@@ -1,35 +1,34 @@
 package com.example.testapp.Object;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.testapp.Callback;
-import com.example.testapp.DBDemo;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class GlobalSingleton {
 
     private Boolean isLogin = false;
     private User currentUser;
+    private List<Game> gameList = new ArrayList<>();
     //private String userID;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
     CollectionReference dbUser = db.collection("users");
+    CollectionReference dbGames = db.collection("games");
+
     private static final String TAG = "DocSnippets";
 
     private static  GlobalSingleton instance;
@@ -60,33 +59,10 @@ public class GlobalSingleton {
         return currentUser;
     }
 
+    public List<Game> getGameList() {return gameList;}
+
     public GlobalSingleton() {}
 
-
-    private void updateUserToFirestore() {
-
-        // creating a collection reference
-        // for our Firebase Firestore database.
-
-
-        // adding our data to our courses object class.
-
-        // below method is use to add data to Firebase Firestore.
-        //dbUser.whereEqualTo("email", currentUser.getEmail()).get().;
-        dbUser.add(currentUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                // after the data addition is successful
-                // we are displaying a success toast message.
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // this method is called when the data addition process is failed.
-                // displaying a toast message when data addition is failed.
-            }
-        });
-    }
 
     public void setCurrentUser(String email) {
 
@@ -101,8 +77,10 @@ public class GlobalSingleton {
                         currentUser =
                                 new User(document.getId(),
                                         (String) document.get("email"),
+                                        (String) document.get("name"),
                                         (List<String>) document.get("gameList"),
                                         Double.parseDouble(document.get("balance").toString()) );
+                        isLogin = true;
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -114,31 +92,81 @@ public class GlobalSingleton {
         });
     }
 
-    public void addUserDEBUG() {
-        db.collection("DEBUGKore").document("DEBUGDoc")
-                .set(
-                        new User("555","Test@com")
-                );
+    public void logout() {
+        currentUser = null;
+        isLogin = false;
+
     }
 
-    public void getUserDEBUG() {
-        db.collection("DEBUGKore").document("DEBUGDoc")
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    public void updateBuyGame(Game game) {
+        currentUser.deductBalance(game.getSalePrice());
+        dbUser.document(currentUser.getId())
+                .update("gameList", FieldValue.arrayUnion(game.getId()));
+        dbUser.document(currentUser.getId())
+                .update("balance",currentUser.getAccountBalance());
+
+    }
+
+    public void addFund() {
+        currentUser.addFund(200);
+        dbUser.document(currentUser.getId())
+                .update("balance",currentUser.getAccountBalance());
+    }
+
+    public void getMasterGameList() {
+        dbGames.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        currentUser = new User((String) document.get("id"),(String) document.get("email"));
-                    } else {
-                        Log.d(TAG, "No such document");
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        gameList.add(
+                                new Game(
+                                        document.getId(),
+                                        (String) document.get("name"),
+                                        (List<String>) document.get("genre"),
+                                        Double.parseDouble(document.get("basePrice").toString()),
+                                        Double.parseDouble(document.get("discount").toString())
+
+                                )
+                        );
                     }
+                    Log.d(TAG, gameList.get(0).getName());
                 } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+                    Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
     }
+
+    public void createNewUser(User user) {
+        dbUser.document().set(user);
+    }
+
+//    public void addUserDEBUG() {
+//        db.collection("DEBUGKore").document("DEBUGDoc")
+//                .set(
+//                        new User("555","Test@com")
+//                );
+//    }
+//
+//    public void getUserDEBUG() {
+//        db.collection("DEBUGKore").document("DEBUGDoc")
+//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+//                        currentUser = new User((String) document.get("id"),(String) document.get("email"));
+//                    } else {
+//                        Log.d(TAG, "No such document");
+//                    }
+//                } else {
+//                    Log.d(TAG, "get failed with ", task.getException());
+//                }
+//            }
+//        });
+//    }
 
 }

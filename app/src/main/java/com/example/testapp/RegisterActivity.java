@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.testapp.Object.GlobalSingleton;
+import com.example.testapp.Object.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -19,9 +21,11 @@ import com.google.firebase.auth.FirebaseUser;
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "EmailPassword";
+    private GlobalSingleton globalSingleton = GlobalSingleton.getInstance();
     private Boolean isRegisterSuccess = false;
     private String email;
     private String password;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         Button registerButton = (Button) findViewById(R.id.buttonRegister);
         EditText textEmail = (EditText) findViewById(R.id.editTextRegisEmail);
-        EditText textPass1 = (EditText) findViewById(R.id.editTextRegisPass1);
+        EditText textName = (EditText) findViewById(R.id.editTextRegisName);
+        EditText textPass = (EditText) findViewById(R.id.editTextRegisPass);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,10 +46,12 @@ public class RegisterActivity extends AppCompatActivity {
                 //Toast.makeText(RegisterActivity.this,"DEBUG2", Toast.LENGTH_SHORT).show();
                 if (textEmail.getText() != null) {
                     email = textEmail.getText().toString();
-                } if (textPass1.getText() != null ) {
-                    password = textPass1.getText().toString();
+                } if (textPass.getText() != null ) {
+                    password = textPass.getText().toString();
+                } if (textName.getText() != null ) {
+                    name = textName.getText().toString();
                 }
-                registerUser(email,password);
+                registerUser(email,password,name);
 
             }
         });
@@ -52,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void registerUser(String email, String password) {
+    private void registerUser(String email, String password, String name) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -61,6 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            globalSingleton.createNewUser(new User(email,name));
                             updateUI(user);
                             finish();
                         } else {

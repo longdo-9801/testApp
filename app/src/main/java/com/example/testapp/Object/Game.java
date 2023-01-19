@@ -1,17 +1,17 @@
 package com.example.testapp.Object;
 
-import java.util.Set;
+import java.util.List;
 
 public class Game {
     private String id;
     private String name;
-    private Set<String> genre;
+    private List<String> genre;
     private double basePrice;
     private double discount;
     private double salePrice;
     private String icon;
 
-    public Game(String id, String name, Set<String> genre, Float basePrice, String icon) {
+    public Game(String id, String name, List<String> genre, double basePrice, String icon) {
         this.id = id;
         this.name = name;
         this.genre = genre;
@@ -21,7 +21,7 @@ public class Game {
         this.setSalePrice();
     }
 
-    public Game(String id, String name, Set<String> genre, Float basePrice, Float discount, String icon) {
+    public Game(String id, String name, List<String> genre, double basePrice, double discount) {
         this.id = id;
         this.name = name;
         this.genre = genre;
@@ -48,11 +48,11 @@ public class Game {
         this.name = name;
     }
 
-    public Set<String> getGenre() {
+    public List<String> getGenre() {
         return genre;
     }
 
-    public void setGenre(Set<String> genre) {
+    public void setGenre(List<String> genre) {
         this.genre = genre;
     }
 

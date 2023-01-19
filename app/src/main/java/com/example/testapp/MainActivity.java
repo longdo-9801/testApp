@@ -14,35 +14,34 @@ import com.example.testapp.Object.GlobalSingleton;
 import com.example.testapp.Object.User;
 
 public class MainActivity extends AppCompatActivity {
-    Boolean isLogin = false;
     GlobalSingleton globalSingleton =  GlobalSingleton.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button myButton = (Button) findViewById(R.id.buttonGotoLogin);
+        Button loginButton = (Button) findViewById(R.id.buttonGotoLogin);
         Button DBDemoButton = (Button) findViewById(R.id.buttonToDatabase);
         TextView progressText = (TextView) findViewById(R.id.progressText);
 
+        globalSingleton.getMasterGameList();
+
         //isLogin = globalSingleton.getLogin();
-        if (isLogin) {
-            myButton.setText("SignOut");
+        if (globalSingleton.getLogin()) {
+            loginButton.setText("SignOut");
         } else {
-            myButton.setText("Login");
+            loginButton.setText("Login");
         }
-        myButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isLogin) {
+                if (!globalSingleton.getLogin()) {
                     Intent intent = new Intent(MainActivity.this,LoginActivity.class);
                     //Intent intent = new Intent(MainActivity.this,PlaceholderActivity.class);
-                    intent.putExtra("message","test Message");
                     //Toast.makeText(MainActivity.this,"DEBUG", Toast.LENGTH_SHORT).show();
                     startActivityForResult(intent,100);
                 } else {
-                    isLogin = false;
-                    myButton.setText("Login");
+                    loginButton.setText("Login");
                 }
             }
         });
@@ -50,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         DBDemoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressText.setText(globalSingleton.getCurrentUser().getEmail());
-                //globalSingleton.getUserDEBUG();
+                //progressText.setText(globalSingleton.getCurrentUser().getEmail());
+                globalSingleton.getMasterGameList();
 //                Intent intentDB = new Intent(MainActivity.this, DBDemo.class);
 //                startActivity(intentDB)
 
@@ -70,13 +69,12 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case 100 : {
                 if (resultCode == RESULT_OK) {
-                    isLogin = true;
                     myButton.setText("Profile");
                     Toast.makeText(MainActivity.this,"DEBUG LOGIN", Toast.LENGTH_SHORT).show();
                     myButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(MainActivity.this,PlaceholderActivity.class);
+                            Intent intent = new Intent(MainActivity.this,UserProfileActivity.class);
                             startActivityForResult(intent,200);
                         }
                     });
@@ -85,21 +83,19 @@ public class MainActivity extends AppCompatActivity {
             }
             case 200 : {
                 if (resultCode == RESULT_OK) {
-                    isLogin = false;
                     myButton.setText("Login");
                     Toast.makeText(MainActivity.this,"DEBUG LOGOUT", Toast.LENGTH_SHORT).show();
 
                     myButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (!isLogin) {
+                            if (!globalSingleton.getLogin()) {
                                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                 //Intent intent = new Intent(MainActivity.this,PlaceholderActivity.class);
                                 intent.putExtra("message", "test Message");
                                 //Toast.makeText(MainActivity.this,"DEBUG", Toast.LENGTH_SHORT).show();
                                 startActivityForResult(intent, 100);
                             } else {
-                                isLogin = false;
                                 myButton.setText("Login");
                             }
                         }

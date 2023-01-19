@@ -8,18 +8,20 @@ import java.util.List;
 public class User {
     private String id;
     private String email;
+    private String name;
     private List<String> gameList;
     private double accountBalance;
 
-    public User(String id, String email) {
-        this.id = id;
+    public User( String email, String name) {
         this.email = email;
+        this.name = name;
         this.accountBalance = 0;
     }
 
-    public User(String id, String email,List<String> gameList, double balance) {
+    public User(String id, String email, String name, List<String> gameList, double balance) {
         this.id = id;
         this.email = email;
+        this.name = name;
         this.gameList = gameList;
         this.accountBalance = balance;
     }
@@ -40,6 +42,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<String> getGameList() {
