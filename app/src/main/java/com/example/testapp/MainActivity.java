@@ -18,17 +18,23 @@ import com.example.testapp.Object.User;
 public class MainActivity extends AppCompatActivity {
     GlobalSingleton globalSingleton =  GlobalSingleton.getInstance();
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        TextView header = (TextView) findViewById(R.id.appStart);
         Button loginButton = (Button) findViewById(R.id.buttonGotoLogin);
 
-        ListView gameList = (ListView) findViewById(R.id.storeGameList);
-
-        gameList.setAdapter(new storeGameViewAdapter(globalSingleton.getGameList(),this));
 
         globalSingleton.getMasterGameList();
+
+
+
+
+
 
         //isLogin = globalSingleton.getLogin();
         if (globalSingleton.getLogin()) {
@@ -46,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(intent,100);
                 } else {
                     loginButton.setText("Login");
+                    header.setText("Welcome To STEAMY, please login to access the store");
                 }
             }
         });
@@ -62,6 +69,19 @@ public class MainActivity extends AppCompatActivity {
             case 100 : {
                 if (resultCode == RESULT_OK) {
                     myButton.setText("Profile");
+
+                    ListView gameList = (ListView) findViewById(R.id.storeGameList);
+
+
+                    gameList.setAdapter(
+                            new storeGameViewAdapter(globalSingleton.getGameList(),this));
+                    TextView header = (TextView) findViewById(R.id.appStart);
+                    if (globalSingleton.getCurrentUser() == null) {
+                        header.setText("Welcome User");
+                    } else {
+                        header.setText("Welcome " + globalSingleton.getCurrentUser().getName());
+                    }
+
                     Toast.makeText(MainActivity.this,"DEBUG LOGIN", Toast.LENGTH_SHORT).show();
                     myButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -76,6 +96,11 @@ public class MainActivity extends AppCompatActivity {
             case 200 : {
                 if (resultCode == RESULT_OK) {
                     myButton.setText("Login");
+
+                    ListView gameList = (ListView) findViewById(R.id.storeGameList);
+                    TextView header = (TextView) findViewById(R.id.appStart);
+                    header.setText("Welcome To STEAMY, please login to access the store");
+                    gameList.removeAllViews();
                     Toast.makeText(MainActivity.this,"DEBUG LOGOUT", Toast.LENGTH_SHORT).show();
 
                     myButton.setOnClickListener(new View.OnClickListener() {

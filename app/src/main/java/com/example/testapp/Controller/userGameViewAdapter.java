@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.testapp.R;
 
 import java.util.List;
@@ -47,7 +45,7 @@ public class userGameViewAdapter extends BaseAdapter {
         if (resultView == null) {
             resultView = layoutInflater.inflate(R.layout.game_icon, null);
             holder = new ViewHolderGameUser();
-            holder.name = (TextView) resultView.findViewById(R.id.gameTitle);
+            holder.name = (TextView) resultView.findViewById(R.id.appStart);
             resultView.setTag(holder);
         } else {
             holder = (ViewHolderGameUser) resultView.getTag();

@@ -66,21 +66,25 @@ public class storeGameViewAdapter extends BaseAdapter {
         holder.basePrice.setText("$" + String.valueOf(localDataSet.get(pointer).getBasePrice()));
         String discountPercent = String.valueOf(100-(10*localDataSet.get(pointer).getDiscount())) + "%";
         if (localDataSet.get(pointer).getDiscount() < 1) {
-            holder.discount.setText(localDataSet.get(pointer).getName());
+            holder.discount.setText(discountPercent);
             holder.salePrice.setText("$" + String.valueOf(localDataSet.get(pointer).getSalePrice()));
-            holder.name.setTextColor(Color.GRAY);
+            holder.basePrice.setTextColor(Color.GRAY);
             holder.discount.setTextColor(Color.GREEN);
         }
         holder.genre1.setText(localDataSet.get(pointer).getGenre().get(0));
         holder.genre2.setText(localDataSet.get(pointer).getGenre().get(1));
         Button buyButton = (Button) resultView.findViewById(R.id.buyButton);
         Boolean isOwned = false;
-        for (int i = 0; i < globalSingleton.getCurrentUser().getGameList().size(); i++) {
-            if (localDataSet.get(pointer).getId().equals(globalSingleton.getCurrentUser().getGameList().get(i))) {
-                isOwned = true;
-                break;
+        if (globalSingleton.getLogin()) {
+            if (!globalSingleton.getCurrentUser().getGameList().isEmpty())
+            for (int i = 0; i < globalSingleton.getCurrentUser().getGameList().size(); i++) {
+                if (localDataSet.get(pointer).getId().equals(globalSingleton.getCurrentUser().getGameList().get(i))) {
+                    isOwned = true;
+                    break;
+                }
             }
         }
+
 
         if (isOwned) {
             buyButton.setText("Owned");
@@ -91,7 +95,14 @@ public class storeGameViewAdapter extends BaseAdapter {
             buyButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    globalSingleton.updateBuyGame(globalSingleton.getGameList().get(pointer));
+                    if (globalSingleton.getLogin()) {
+                        if (!globalSingleton.getCurrentUser().getGameList().isEmpty())
+                        {
+                            globalSingleton.updateBuyGame(globalSingleton.getGameList().get(pointer));
+                        }
+                    }
+
+
                 }
             });
         }

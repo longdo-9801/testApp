@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/gameTitle"
+        android:id="@+id/appStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome To STEAMY, please login to access the store"
@@ -27,7 +27,7 @@
         android:layout_marginTop="28dp"
         android:text="PLACEHOLDER"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gameTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/appStart" />
 
     <ListView
         android:id="@+id/storeGameList"
