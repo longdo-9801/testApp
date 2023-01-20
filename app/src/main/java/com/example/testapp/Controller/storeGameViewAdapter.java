@@ -18,25 +18,26 @@ import java.util.List;
 
 public class storeGameViewAdapter extends BaseAdapter {
 
-    private List<Game> localDataSet;
+    private List<Game> localGameDataSet;
     private LayoutInflater layoutInflater;
     private Context aContext;
     private GlobalSingleton globalSingleton = GlobalSingleton.getInstance();
     private Game game;
+    Boolean isOwned = false;
 
     public storeGameViewAdapter(List<Game> dataSet, Context aContext) {
-        localDataSet = dataSet;
+        localGameDataSet = dataSet;
         layoutInflater = LayoutInflater.from(aContext);
     }
 
     @Override
     public int getCount() {
-        return localDataSet.size();
+        return localGameDataSet.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return localDataSet.get(i);
+        return localGameDataSet.get(i);
     }
 
     @Override
@@ -47,6 +48,7 @@ public class storeGameViewAdapter extends BaseAdapter {
     @Override
     public View getView(int pointer, View resultView, ViewGroup viewGroup) {
         ViewHolderGameUser holder;
+
 
         if (resultView == null) {
             resultView = layoutInflater.inflate(R.layout.store_game_icon, null);
@@ -62,27 +64,33 @@ public class storeGameViewAdapter extends BaseAdapter {
             holder = (ViewHolderGameUser) resultView.getTag();
         }
 
-        holder.name.setText(localDataSet.get(pointer).getName());
-        holder.basePrice.setText("$" + String.valueOf(localDataSet.get(pointer).getBasePrice()));
-        String discountPercent = String.valueOf(100-(10*localDataSet.get(pointer).getDiscount())) + "%";
-        if (localDataSet.get(pointer).getDiscount() < 1) {
+        holder.name.setText(localGameDataSet.get(pointer).getName());
+        holder.basePrice.setText("$" + String.valueOf(localGameDataSet.get(pointer).getBasePrice()));
+        String discountPercent = String.valueOf(100-(10* localGameDataSet.get(pointer).getDiscount())) + "%";
+        if (localGameDataSet.get(pointer).getDiscount() < 1) {
             holder.discount.setText(discountPercent);
-            holder.salePrice.setText("$" + String.valueOf(localDataSet.get(pointer).getSalePrice()));
+            holder.salePrice.setText("$" + String.valueOf(localGameDataSet.get(pointer).getSalePrice()));
             holder.basePrice.setTextColor(Color.GRAY);
             holder.discount.setTextColor(Color.GREEN);
         }
-        holder.genre1.setText(localDataSet.get(pointer).getGenre().get(0));
-        holder.genre2.setText(localDataSet.get(pointer).getGenre().get(1));
+        holder.genre1.setText(localGameDataSet.get(pointer).getGenre().get(0));
+        holder.genre2.setText(localGameDataSet.get(pointer).getGenre().get(1));
         Button buyButton = (Button) resultView.findViewById(R.id.buyButton);
-        Boolean isOwned = false;
+
         if (globalSingleton.getLogin()) {
-            if (!globalSingleton.getCurrentUser().getGameList().isEmpty())
-            for (int i = 0; i < globalSingleton.getCurrentUser().getGameList().size(); i++) {
-                if (localDataSet.get(pointer).getId().equals(globalSingleton.getCurrentUser().getGameList().get(i))) {
-                    isOwned = true;
-                    break;
+            if (!globalSingleton.getCurrentUser().getGameList().isEmpty()) {
+                for (int i = 0; i < globalSingleton.getCurrentUser().getGameList().size(); i++) {
+                    if (localGameDataSet.get(pointer).getId().equals(globalSingleton.getCurrentUser().getGameList().get(i))) {
+                        isOwned = true;
+                        break;
+                    } else {
+                        System.out.println("DEBUG");
+                        System.out.println(pointer);
+                        System.out.println(i);
+                    }
                 }
             }
+
         }
 
 
@@ -91,20 +99,26 @@ public class storeGameViewAdapter extends BaseAdapter {
             holder.discount.setText("");
             holder.salePrice.setText("");
             holder.basePrice.setText("Item already bought");
-        }else {
-            buyButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (globalSingleton.getLogin()) {
+        } else {
+            buyButton.setText("Buy");
+            if (globalSingleton.getLogin()) {
+                buyButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
                         if (!globalSingleton.getCurrentUser().getGameList().isEmpty())
                         {
-                            globalSingleton.updateBuyGame(globalSingleton.getGameList().get(pointer));
+                            globalSingleton.updateBuyGame(localGameDataSet.get(pointer));
+                            buyButton.setText("Owned");
+                            holder.discount.setText("");
+                            holder.salePrice.setText("");
+                            holder.basePrice.setText("Item already bought");
                         }
+
+
                     }
+                });
+            }
 
-
-                }
-            });
         }
         return resultView;
     }

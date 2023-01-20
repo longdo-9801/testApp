@@ -63,11 +63,18 @@
 
         <Button
             android:id="@+id/addfundButton"
-            android:layout_width="204dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="Buy $200 Gift Card"
             android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="126dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Back" />
     </LinearLayout>
 
     <ScrollView

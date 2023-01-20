@@ -36,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         Button registerButton = (Button) findViewById(R.id.buttonRegister);
+        Button back = (Button) findViewById(R.id.regisBack);
         EditText textEmail = (EditText) findViewById(R.id.editTextRegisEmail);
         EditText textName = (EditText) findViewById(R.id.editTextRegisName);
         EditText textPass = (EditText) findViewById(R.id.editTextRegisPass);
@@ -53,6 +54,12 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 registerUser(email,password,name);
 
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 

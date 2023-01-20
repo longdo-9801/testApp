@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.testapp.CallbackUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -64,7 +65,7 @@ public class GlobalSingleton {
     public GlobalSingleton() {}
 
 
-    public void setCurrentUser(String email) {
+    public void setCurrentUser(String email, final CallbackUser callback) {
 
         dbUser.whereEqualTo("email", email)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -74,12 +75,15 @@ public class GlobalSingleton {
                     DocumentSnapshot document = task.getResult().getDocuments().get(0);
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document);
-                        currentUser =
+                        setLoginState(
                                 new User(document.getId(),
                                         (String) document.get("email"),
                                         (String) document.get("name"),
                                         (List<String>) document.get("gameList"),
-                                        Double.parseDouble(document.get("balance").toString()) );
+                                        Double.parseDouble(document.get("balance").toString())
+                                )
+                        );
+
                         isLogin = true;
                     } else {
                         Log.d(TAG, "No such document");
@@ -92,6 +96,28 @@ public class GlobalSingleton {
         });
     }
 
+    public void updateCurrentUser() {
+        dbUser.document(currentUser.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document);
+                        currentUser.setBalance(Double.parseDouble(document.get("balance").toString()));
+                        currentUser.setGameList((List<String>) document.get("gameList"));
+
+                        isLogin = true;
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                }
+            }
+        });
+    }
+
+
+
     public void logout() {
         currentUser = null;
         isLogin = false;
@@ -99,18 +125,25 @@ public class GlobalSingleton {
     }
 
     public void updateBuyGame(Game game) {
-        currentUser.deductBalance(game.getSalePrice());
-        dbUser.document(currentUser.getId())
-                .update("gameList", FieldValue.arrayUnion(game.getId()));
-        dbUser.document(currentUser.getId())
-                .update("balance",currentUser.getAccountBalance());
+        currentUser.addGame(game);
+        if (currentUser.getGameList().isEmpty()) {
+            dbUser.document(currentUser.getId()).update("gameList",game.getId());
+        } else {
+            dbUser.document(currentUser.getId())
+                    .update("gameList", currentUser.getGameList());
+            dbUser.document(currentUser.getId())
+                    .update("balance",currentUser.getBalance());
+        }
+        updateCurrentUser();
+
 
     }
 
     public void addFund() {
         currentUser.addFund(200);
         dbUser.document(currentUser.getId())
-                .update("balance",currentUser.getAccountBalance());
+                .update("balance",currentUser.getBalance());
+        updateCurrentUser();
     }
 
     public void getMasterGameList() {

@@ -34,8 +34,9 @@ public class UserProfileActivity extends AppCompatActivity {
         TextView balance = (TextView) findViewById(R.id.accountBalance);
         Button logoutButton = (Button) findViewById(R.id.logout_Button);
         Button addFundButton = (Button) findViewById(R.id.addfundButton);
+        Button backtoMain = (Button) findViewById(R.id.backButton);
 
-        String balanceText = "$" + globalSingleton.getCurrentUser().getAccountBalance();
+        String balanceText = "$" + globalSingleton.getCurrentUser().getBalance();
 
         name.setText(globalSingleton.getCurrentUser().getName());
         balance.setText(balanceText);
@@ -60,7 +61,7 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 globalSingleton.addFund();
-                String updatebalanceText = "$" + globalSingleton.getCurrentUser().getAccountBalance();
+                String updatebalanceText = "$" + globalSingleton.getCurrentUser().getBalance();
                 balance.setText(updatebalanceText);
             }
         });
@@ -71,6 +72,13 @@ public class UserProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(UserProfileActivity.this,MainActivity.class);
                 globalSingleton.logout();
                 setResult(RESULT_OK,intent);
+                finish();
+            }
+        });
+
+        backtoMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 finish();
             }
         });

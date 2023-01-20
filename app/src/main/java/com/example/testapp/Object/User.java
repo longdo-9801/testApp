@@ -1,8 +1,7 @@
 package com.example.testapp.Object;
 
-import com.example.testapp.Object.Game;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -10,12 +9,13 @@ public class User {
     private String email;
     private String name;
     private List<String> gameList;
-    private double accountBalance;
+    private double balance;
 
     public User( String email, String name) {
         this.email = email;
         this.name = name;
-        this.accountBalance = 0;
+        this.balance = 0;
+        this.gameList = new ArrayList<>();
     }
 
     public User(String id, String email, String name, List<String> gameList, double balance) {
@@ -23,7 +23,7 @@ public class User {
         this.email = email;
         this.name = name;
         this.gameList = gameList;
-        this.accountBalance = balance;
+        this.balance = balance;
     }
 
 
@@ -60,28 +60,28 @@ public class User {
         this.gameList = gameList;
     }
 
-    public double getAccountBalance() {
-        return accountBalance;
+    public double getBalance() {
+        return balance;
     }
 
-    public void setAccountBalance(double accountBalance) {
-        this.accountBalance = accountBalance;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public void deductBalance(double amount) {
-        if (accountBalance > amount) {
-            setAccountBalance( (getAccountBalance() - amount));
+        if (balance > amount) {
+            setBalance( (getBalance() - amount));
         }
     }
 
     public  void addFund(double amount) {
-        setAccountBalance( (getAccountBalance() + amount));
+        setBalance( (getBalance() + amount));
     }
 
     public void addGame(Game game) {
-        if (accountBalance > game.getSalePrice()) {
+        if (balance > game.getSalePrice()) {
             gameList.add(game.getId());
-            setAccountBalance( (getAccountBalance() - game.getSalePrice()));
+            setBalance( (getBalance() - game.getSalePrice()));
         }
 
     }

@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.testapp.Object.GlobalSingleton;
@@ -36,10 +35,12 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         Button returnButton = (Button) findViewById(R.id.buttonLogin);
+        Button back = (Button) findViewById(R.id.loginBack);
         Button registerButton = (Button) findViewById(R.id.buttonGoToRegister);
         EditText textEmail = (EditText) findViewById(R.id.editTextLoginEmail);
         EditText textPass = (EditText) findViewById(R.id.editTextLoginPass);
 
+        Button cheat = findViewById(R.id.buttonForget);
 
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +70,23 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(registerIntent);
             }
         });
+
+        cheat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                textEmail.setText("a@test.com");
+                textPass.setText("123456");
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
+
 
     private void signIn(String email, String password) {
         //Toast.makeText(LoginActivity.this,"DEBUG3", Toast.LENGTH_LONG).show();
@@ -83,7 +100,11 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this,"LOGIN SUCCESS", Toast.LENGTH_LONG).show();
 
                             FirebaseUser user = mAuth.getCurrentUser();
-                            globalSingleton.setCurrentUser(email);
+                            globalSingleton.setCurrentUser(email, new CallbackUser() {
+                                @Override
+                                public void firestoreCallBack(User result) {
+                                }
+                            });
                             updateUI(user);
                             finish();
                         } else {

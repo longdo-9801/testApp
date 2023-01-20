@@ -30,9 +30,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         globalSingleton.getMasterGameList();
+        //header.setText("Welcome To STEAMY, please login to access the store");
 
 
+        ListView gameList = (ListView) findViewById(R.id.storeGameList);
 
+        gameList.setAdapter(
+                new storeGameViewAdapter(globalSingleton.getGameList(),this));
 
 
 
@@ -57,6 +61,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+    protected void onResume() {
+        super.onResume();
+        ListView gameList = (ListView) findViewById(R.id.storeGameList);
+
+        gameList.setAdapter(
+                new storeGameViewAdapter(globalSingleton.getGameList(),this));
+        TextView header = (TextView) findViewById(R.id.appStart);
+        if (globalSingleton.getCurrentUser() == null) {
+            //header.setText("Welcome User");
+        } else {
+            header.setText("Welcome " + globalSingleton.getCurrentUser().getName());
+        }
     }
 
     @Override
@@ -100,12 +117,12 @@ public class MainActivity extends AppCompatActivity {
                     ListView gameList = (ListView) findViewById(R.id.storeGameList);
                     TextView header = (TextView) findViewById(R.id.appStart);
                     header.setText("Welcome To STEAMY, please login to access the store");
-                    gameList.removeAllViews();
                     Toast.makeText(MainActivity.this,"DEBUG LOGOUT", Toast.LENGTH_SHORT).show();
 
                     myButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+
                             if (!globalSingleton.getLogin()) {
                                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                                 //Intent intent = new Intent(MainActivity.this,PlaceholderActivity.class);
